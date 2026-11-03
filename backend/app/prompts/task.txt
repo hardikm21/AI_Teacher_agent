@@ -1,0 +1,9 @@
+Break the current week's theme into 5 daily tasks (Mon-Fri). For each day:
+
+  day (1-5), title, description, steps (3-5 imperative bullets),
+  submission.{github_folder, filename, commit_message},
+  estimated_hours (1-4)
+
+The Friday task should be the integrative one that produces the week's
+deliverable. File names should be realistic and reflect the chosen stack
+(no "file1.py"-style placeholders). Output JSON only.

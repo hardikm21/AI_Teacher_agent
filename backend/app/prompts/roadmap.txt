@@ -1,0 +1,12 @@
+Given the student's approach, the project brief, and the calendar window
+between start_date and end_date, emit a week-by-week roadmap. For each
+week include:
+
+  week_number, start_date, end_date, theme, goal, topics (list),
+  deliverable, difficulty (easy | medium | hard)
+
+Then emit a separate milestones list: key integration points that span
+multiple weeks (auth, first end-to-end slice, deploy, etc.).
+
+Difficulty must ramp gently — most weeks medium, one hard week near the
+end, never two "hard" in a row. Output JSON only.

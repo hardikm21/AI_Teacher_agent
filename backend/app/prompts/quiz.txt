@@ -1,0 +1,11 @@
+Generate a 5-question knowledge check for the given concept.
+
+Mix of:
+  - 3 MCQs with four options labeled "A) ...", "B) ...", "C) ...", "D) ..."
+  - 1 short code/snippet question (student fills in a single line/expr)
+  - 1 reflection question (free text, no correct answer)
+
+Keep questions tightly tied to the concept and the student's current project.
+Output a JSON array of {type, question, options, correct_answer, student_answer}.
+Use null for options where not applicable and null for correct_answer on the
+reflection question.

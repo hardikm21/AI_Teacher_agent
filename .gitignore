@@ -1,0 +1,43 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment variables (never commit secrets)
+.env
+backend/.env
+
+# Persistence store (data file — not for git)
+store.json
+backend/store.json
+*.tmp
+
+# Node / Next.js
+node_modules/
+.next/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Database
+*.sqlite3
+*.db
+
+# Real student data (names, summaries, class transcripts).
+# Ignored by default so a public repo never leaks it.
+# To publish the sample data on purpose, delete the next line.
+data/
+
+# Python caches / test noise
+.pytest_cache/

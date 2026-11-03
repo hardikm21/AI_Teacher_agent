@@ -1,0 +1,150 @@
+'use client'
+import { useState } from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { registerUser } from '@/lib/api'
+import { saveAuth } from '@/lib/auth'
+
+export default function SignUpPage() {
+  const router = useRouter()
+  const [name, setName]         = useState('')
+  const [email, setEmail]       = useState('')
+  const [password, setPassword] = useState('')
+  const [role, setRole]         = useState('student')
+  const [error, setError]       = useState('')
+  const [loading, setLoading]   = useState(false)
+
+  async function submit(e) {
+    e.preventDefault()
+    setError('')
+    if (!name || !email || !password) { setError('All fields required.'); return }
+    if (password.length < 6) { setError('Password must be at least 6 characters.'); return }
+    setLoading(true)
+    try {
+      const res = await registerUser({ name, email, password, role })
+      saveAuth({ token: res.token, user: res.user })
+      router.push('/classes')
+    } catch (e) {
+      setError(e.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <main style={pageStyle}>
+      <div className="tf-aurora" style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }} />
+      <form onSubmit={submit} style={cardStyle}>
+        <div style={{ textAlign: 'center', marginBottom: 12 }}>
+          <div style={{
+            fontFamily: 'var(--font-head)',
+            fontSize: 30,
+            fontWeight: 800,
+            letterSpacing: '-0.5px',
+          }}>
+            ai<span style={{ color: 'var(--accent)' }}>teacher</span>
+          </div>
+          <div style={{ color: 'var(--muted)', fontSize: 14, marginTop: 8 }}>
+            Create an account to get started
+          </div>
+        </div>
+
+        <label className="tf-label">I am a</label>
+        <div style={{ display: 'flex', gap: 8 }}>
+          {['student', 'teacher'].map((r) => {
+            const active = role === r
+            return (
+              <button
+                key={r}
+                type="button"
+                onClick={() => setRole(r)}
+                style={{
+                  flex: 1,
+                  padding: '10px 12px',
+                  borderRadius: 10,
+                  fontSize: 14,
+                  fontWeight: 500,
+                  textTransform: 'capitalize',
+                  cursor: 'pointer',
+                  background: active ? 'rgba(108,92,231,0.08)' : 'var(--surface2)',
+                  color: active ? 'var(--accent)' : 'var(--muted)',
+                  border: `1.5px solid ${active ? 'var(--accent)' : 'var(--border)'}`,
+                  transition: 'all 0.15s',
+                }}
+              >
+                {r === 'student' ? '🎓 Student' : '👩‍🏫 Teacher'}
+              </button>
+            )
+          })}
+        </div>
+
+        <label className="tf-label" style={{ marginTop: 4 }}>Name</label>
+        <input
+          className="tf-input"
+          placeholder="Your full name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+
+        <label className="tf-label">Email</label>
+        <input
+          className="tf-input"
+          type="email"
+          placeholder="you@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <label className="tf-label">Password</label>
+        <input
+          className="tf-input"
+          type="password"
+          placeholder="At least 6 characters"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        {error && <div style={errorStyle}>{error}</div>}
+
+        <button className="tf-btn" disabled={loading} style={{ marginTop: 10, width: '100%', justifyContent: 'center' }}>
+          {loading ? 'Creating...' : 'Create account'}
+        </button>
+
+        <div style={{ textAlign: 'center', fontSize: 14, color: 'var(--muted)', marginTop: 16 }}>
+          Already have an account? <Link href="/signin" style={{ color: 'var(--accent)', fontWeight: 600, textDecoration: 'none' }}>Sign in</Link>
+        </div>
+      </form>
+    </main>
+  )
+}
+
+const pageStyle = {
+  minHeight: '100vh',
+  display: 'grid',
+  placeItems: 'center',
+  padding: 24,
+  position: 'relative',
+  overflow: 'hidden',
+}
+const cardStyle = {
+  position: 'relative',
+  zIndex: 1,
+  width: '100%',
+  maxWidth: 440,
+  background: 'var(--surface)',
+  border: '1px solid var(--border)',
+  borderRadius: 16,
+  padding: '36px 32px',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 8,
+  boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
+}
+const errorStyle = {
+  background: 'rgba(224,68,68,0.06)',
+  border: '1px solid rgba(224,68,68,0.2)',
+  color: 'var(--danger)',
+  padding: '10px 12px',
+  borderRadius: 8,
+  fontSize: 13,
+}
